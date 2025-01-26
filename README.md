@@ -455,7 +455,7 @@ These are the Logs we will collect the following sources:
 - syslog (linux-vm)
 - Flow Logs (NSGs)
 
-Steps to Enable NSG Flow Logs
+**<u>Steps to Enable NSG Flow Logs</u>**
 
 #### 5.1. Enable Network Watcher
 
