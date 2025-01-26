@@ -766,6 +766,64 @@ az monitor diagnostic-settings list \
     --output table
 ```
 
+### 8. Configure Logging for Azure Storage and Key Vault (Resource-Level Logging)
+
+Resource-Level Logs in Azure provide detailed insights into the operations and performance of individual resources. These include resource logs (e.g., read/write/delete operations within a resource), metrics (e.g., CPU usage, memory utilization, or request latency), and diagnostic logs specific to the resource type (e.g., virtual machine boot logs, database queries, or storage access). These logs are crucial for troubleshooting, performance optimization, and auditing resource-specific activities.
+
+
+#### 8.1. Create Diagnostic Settings for Azure Storage Account (Audit Logs)
+
+Use the following command to create a diagnostic setting for the Storage Account and enable Audit Logs:
+```Bash
+az monitor diagnostic-settings create \
+    --name <diagnostic-setting-name> \
+    --resource "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.Storage/storageAccounts/Honeynet-Storage" \
+    --workspace <log-analytics-workspace-id> \
+    --logs '[{"category": "AuditLogs", "enabled": true}]'
+```
+
+**Parameters:**
+--name <diagnostic-setting-name>: The name for the diagnostic setting (e.g., StorageAuditLogs).
+--resource: The full resource ID of the Storage Account.
+--workspace: The ID of the Log Analytics Workspace where the logs will be sent.
+--logs '[{"category": "AuditLogs", "enabled": true}]': Specifies that AuditLogs should be enabled for the Storage Account.
+
+
+#### 8.2. Verify Configuration
+
+To verify that the diagnostic settings were applied correctly, you can run:
+```Bash
+az monitor diagnostic-settings list \
+    --resource "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.Storage/storageAccounts/Honeynet-Storage" \
+    --output table
+```
+
+#### 8.3. Create Diagnostic Settings for Key Vault (Audit Logs)
+
+Use the following Azure CLI command to enable logging for Audit Logs in your Key Vault:
+```Bash
+az monitor diagnostic-settings create \
+    --name <diagnostic-setting-name> \
+    --resource "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.KeyVault/vaults/Honeynet-KeyVault" \
+    --workspace <log-analytics-workspace-id> \
+    --logs '[{"category": "AuditEvent", "enabled": true}]'
+```
+
+**Parameters:**
+--name <diagnostic-setting-name>: Name of the diagnostic setting (e.g., KeyVaultAuditLogs).
+--resource: The full resource ID of the Key Vault.
+--workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the logs will be sent. 
+--logs '[{"category": "AuditEvent", "enabled": true}]': Specifies the log category (AuditEvent) to enable.
+
+
+#### 8.4. Verify Configuration
+
+To confirm the diagnostic settings were created, run:
+```Bash
+az monitor diagnostic-settings list \
+    --resource "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.KeyVault/vaults/Honeynet-KeyVault" \
+    --output table
+```
 
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
