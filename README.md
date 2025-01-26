@@ -346,6 +346,107 @@ az sentinel watchlist create \
 --file: Path to the .csv file containing the watchlist data.
 --items-search-key: The key column name in your CSV that will be used to query the watchlist (e.g., network in this case).
 
+### 4. Enable Microsoft Defender for Cloud
+
+Microsoft Defender for Cloud is a comprehensive security solution that helps organizations protect their cloud workloads across Azure, AWS, and Google Cloud environments. It offers capabilities like security posture management, threat protection, vulnerability management, and compliance monitoring. By continuously assessing risks and providing real-time alerts, Defender for Cloud helps detect threats early, automate security management, and ensure compliance with industry standards. It also integrates with other Microsoft security products, offering a unified approach to defending critical assets like virtual machines, SQL databases, storage accounts, and Key Vaults. This reduces the attack surface, improves security posture, and enhances overall cloud security.
+
+#### 4.1. Enable Microsoft Defender for Cloud Plans
+
+Use the following commands to enable Defender for Cloud plans for VMs, SQL Servers, Storage Accounts, and Key Vault at the subscription level.
+
+Commands to Enable Defender for Resources:
+```Bash
+# Enable Defender for Virtual Machines
+az security pricing create --name VirtualMachines --tier Standard
+
+# Enable Defender for SQL Servers
+az security pricing create --name SqlServers --tier Standard
+
+# Enable Defender for Storage Accounts
+az security pricing create --name StorageAccounts --tier Standard
+
+# Enable Defender for Key Vaults
+az security pricing create --name KeyVaults --tier Standard
+```
+
+**Parameters:**
+
+--name: The Defender Plan to Enable (VirtualMachines, SqlServers, StorageAccounts, KeyVaults)
+--tier: The tier of the Defender plan. Set to standard to enable the full set of features for that resource
+
+
+#### 4.2. Enable Windows Defender for Cloud for Log Analytics Workspace
+
+Defender for Cloud integrates with Log Analytics Workspace to store and analyze logs, alerts, and security data. Use the following command to enable Defender for the workspace:
+
+Command to Enable Defender for Log Analytics Workspace:
+```Bash
+az security setting update \
+  --name MCAS \
+  --value Enabled \
+  --workspace-id "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.OperationalInsights/workspaces/Honeynet-LAW"
+```
+
+**Parameters:**
+
+--name: The setting to enable (e.g. MCAS for Defender integration with the workspace)
+--value: Set to Enabled to activate Defender for Cloud integration
+--workspace-id: The full resource ID of the Log Analytics Workspace
+
+You can retrieve this ID with:
+```Bash
+az monitor log-analytics workspace show \
+  --resource-group Honeynet-RG \
+  --workspace-name Honeynet-LAW \
+  --query id -o tsv
+```
+
+#### 4.3. Configure Continuous Export
+
+Continuous Export sends data from Microsoft Defender for Cloud to a destination like Log Analytics Workspace, Event Hub, or Storage Account.
+
+The command to Enable Continuous Export to Log Analytics Workspace:
+```Bash
+az security setting update \
+  --name ContinuousExport \
+  --workspace-id "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.OperationalInsights/workspaces/Honeynet-LAW" \
+  --value Enabled
+```
+
+**Parameters:**
+--name: The name of the Setting (ContinuousExport)
+--workspace-id: The full resource ID of the Log Analytics Workspace
+
+#### 4.4. Ensure Collection of All Windows Security Events
+
+To ensure that all Windows security events are collected (including all events in your VMs), we will need to configure Data Collection Rules (DCR) and set them to collect Windows security events.
+
+Command to Create and Configure Data Collection Rule:
+```Bash
+az monitor data-collection rule create \
+  --resource-group <resource-group-name> \
+  --rule-name "AllWindowsSecurityEvents" \
+  --data-sources "WindowsSecurity" \
+  --destination "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.OperationalInsights/workspaces/Honeynet-LAW"
+```
+
+#### 4.5. Verify the Configuration
+
+After configuring the Microsoft Defender for Cloud settings, you can verify the settings as follows:
+
+Verify Defender Plan Settings:
+```Bash
+az security pricing list --output table
+```
+Verify Continuous Export Settings:
+```Bash
+az security setting list --output table
+```
+Verify Data Collection Rule (DCR):
+```Bash
+az monitor data-collection rule list --output table
+```
+
 
 
 
