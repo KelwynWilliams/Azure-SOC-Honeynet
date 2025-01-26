@@ -1073,9 +1073,27 @@ In this step, we will enable MDC Regulatory Compliance Recommendations based on 
 
 ### 5.1. Enable Microsoft Defender for Cloud Regulatory Compliance Recommendations based on NIST 800-53
 
-Using the Azure Portal, Serch for "Microsoft Defender for Cloud"
+Using the Azure Portal, Serch for "Microsoft Defender for Cloud"  
 
-Select the Following: Regulatory Compliance > Manage Compliance Polices > Select Subscription > Security Policy > Industry & Regulatory Standards (Add more Standards) > Add NIST 800-53 (Latest Revision) > Review + Create with Default Settings
+Select the Following:  
+
+Regulatory Compliance > Manage Compliance Polices > Select Subscription > Security Policy > Industry & Regulatory Standards (Add more Standards) > Add NIST 800-53 (Latest Revision) > Review + Create with Default Settings
+
+![NIST 800-53 (1)](https://github.com/user-attachments/assets/ca1c7019-b955-4020-ba33-c02845013b09)<br>
+![NIST 800-53 (2)](https://github.com/user-attachments/assets/3597ab7a-bbbc-440c-9823-ea1b8e74a90d)<br>
+![NIST 800-53 (3)](https://github.com/user-attachments/assets/c48542ee-f5ad-4499-9dd8-1f289e1bf67f)<br>
+![NIST 800-53 (4)](https://github.com/user-attachments/assets/00c16ac5-8cc0-465f-998e-e94bada99df1)<br>
+![NIST 800-53 (5)](https://github.com/user-attachments/assets/eb2399ff-99fb-43bb-8d25-36c2ff5974c7)<br>
+![NIST 800-53 (6)](https://github.com/user-attachments/assets/d37aa74c-3cf3-4891-ac34-083e44789a70)<br>
+![NIST 800-53 (7)](https://github.com/user-attachments/assets/835141f5-9fc1-432c-a690-8467e0014b19)<br>
+
+
+
+
+
+
+
+
 
 
 ## Metrics After Hardening / Security Controls
