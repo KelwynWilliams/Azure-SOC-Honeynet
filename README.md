@@ -41,6 +41,49 @@ Let's start by configuring the resources we will need for our Honeynet
 az group create --name Honeynet-RG --location eastus
 ```
 
+2. Create a Virtual Network and Subnet
+```Bash
+az network vnet create \
+  --resource-group Honeynet-RG \
+  --name Honeynet-VNet \
+  --address-prefix 10.0.0.0/16 \
+  --subnet-name Honeynet-Subnet \
+  --subnet-prefix 10.0.0.0/24
+```
+
+3. Create a Public IP Address
+```Bash
+az network public-ip create \
+  --resource-group Honeynet-RG \
+  --name Honeynet-PublicIP
+```
+
+4. Create a Network Security Group (NSG) to Allow all Inbound Traffic via the Internet
+
+We are creating this NSG to allow all inbound traffic to our Virtual Machines, making our Honeynet environment enticing to attackers/hackers. not to worry will be replaced with a hardened NSG later on in our project.
+
+4.1. Create NSG Instance
+```Bash
+az network nsg create \
+  --resource-group Honeynet-RG \
+  --name Honeynet-NSG
+```
+4.2. Create NSG Rule to Allow All Inbound Traffic
+```Bash
+az network nsg rule create \
+  --resource-group Honeynet-RG \
+  --nsg-name Honeynet-NSG \
+  --name DANGER_AllowAnyInbound \
+  --priority 100 \
+  --direction Inbound \
+  --access Allow \
+  --protocol ‘*’ \
+  --source-address-prefix ‘*’ \
+  --source-port-range ‘*’ \
+  --destination-address-prefix ‘*’ \
+  --destination-port-range ‘*’
+```
+
 
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
