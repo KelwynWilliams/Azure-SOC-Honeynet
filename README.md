@@ -726,6 +726,45 @@ az monitor diagnostic-settings list \
     --output table
 ```
 
+### 7. Export Azure Activity Logs to Log Analytics Workspace (Subscription-Level Logging)
+
+Subscription-Level Logs in Azure capture activities and events related to resources within a specific subscription. These include Activity Logs (records of management operations like resource creation, updates, or deletions), Resource Logs (detailed logs specific to individual resources), Policy Logs (evaluations of Azure Policy compliance), Security Alerts (threat and vulnerability alerts from Azure Security Center), and Autoscale Logs (information about scaling actions). These logs are essential for monitoring resource usage, ensuring compliance, and maintaining security at the subscription level.
+
+#### 7.1. Identify the Log Analytics Workspace where the activity logs will be sent:
+```Bash
+az monitor log-analytics workspace list \
+    --query "[].{Name:name, ID:id}" \
+    --output table
+```
+
+Note the ID of the desired workspace.
+
+#### 7.2. Create Diagnostic Settings for Activity Logs
+
+Use the following command to create a diagnostic setting for exporting all categories of activity logs to a Log Analytics Workspace:
+```Bash
+az monitor diagnostic-settings create \
+    --name ActivityLogsDS \
+    --resource "/subscriptions/<subscription-id>" \
+    --workspace <log-analytics-workspace-id> \
+    --logs '[{"category": "Administrative", "enabled": true}, {"category": "Security", "enabled": true}, {"category": "ServiceHealth", "enabled": true}, {"category": "Alert", "enabled": true}, {"category": "Recommendation", "enabled": true}, {"category": "Policy", "enabled": true}, {"category": "Autoscale", "enabled": true}, {"category": "ResourceHealth", "enabled": true}]'
+```
+
+**Parameters:**
+--name: The name for the diagnostic setting (e.g., ActivityLogDS).
+--resource "/subscriptions/<subscription-id>": Specifies the subscription for which activity logs are being exported. Replace <subscription-id> with your subscription ID.
+--workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the activity logs will be sent.
+--logs: A JSON array specifying all activity log categories to export, with enabled set to true.
+
+
+#### 7.3. Verify Configuration
+
+To confirm that the diagnostic settings were successfully created, run:
+```Bash
+az monitor diagnostic-settings list \
+    --resource "/subscriptions/<subscription-id>" \
+    --output table
+```
 
 
 ## Attack Maps Before Hardening / Security Controls
