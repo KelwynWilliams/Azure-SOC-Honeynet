@@ -323,6 +323,29 @@ az sentinel create \
 --resource-group: The resource group containing the Log Analytics workspace.
 --workspace-name: Name of the workspace on which to enable Microsoft Sentinel.
 
+### 3. Create the Watchlist
+
+To create a watchlist in Microsoft Sentinel, use the az sentinel watchlist create command and include the --file parameter to upload your .csv file:
+```Bash
+az sentinel watchlist create \
+  --resource-group "Honeynet-RG" \
+  --workspace-name "Honeynet-LAW" \
+  --watchlist-name "geoip" \
+  --alias "geoip" \
+  --description "List of Geo IP addresses used map events/alerts" \
+  --file "./geoip-summarized.csv" \
+  --items-search-key "network"
+```
+
+**Parameters:**
+--resource-group: The name of the resource group.
+--workspace-name: The name of the Log Analytics workspace associated with Microsoft Sentinel.
+--watchlist-name: A unique name for the watchlist.
+--alias: An optional,  unique identifier for the watchlist.
+--description: A brief description of the watchlist’s purpose.
+--file: Path to the .csv file containing the watchlist data.
+--items-search-key: The key column name in your CSV that will be used to query the watchlist (e.g., network in this case).
+
 
 
 
