@@ -84,6 +84,45 @@ az network nsg rule create \
   --destination-port-range ‘*’
 ```
 
+5. Configure the Windows VM 
+
+5.1. Create Windows VM
+Here, we use a Windows 10 image for the VM.
+```Bash
+az vm create \
+  --resource-group Honeynet-RG \
+  --name Windows-VM \
+  --vnet-name Honeynet-VNet \
+  --subnet Honeynet-Subnet \
+  --image MicrosoftWindowsDesktop:Windows-10:win10-21h2-pro:latest \
+  --admin-username <username> \
+  --admin-password <password>
+```
+
+5.2. Identify the NIC Associated with the Windows VM
+
+We will need to know the VM's Network Interface Card (NIC) in order to associate the Open Honeynet NSG to the VM
+```Bash
+az vm show \
+  --resource-group Honeynet-RG \
+  --name Windows-VM \
+  --query “networkProfile.networkInterfaces[0].id” \
+  --output tsv
+```
+
+5.3. Apply the NSG to the NIC
+
+Use the az network nic update command to associate the NSG with the Windows NIC
+```Bash
+az network nic update \
+  --resource-group Honeynet-RG \
+  --name <WindowsVMNIC> \
+  --network-security-group Honeynet-NSG
+```
+**Parameters:**
+  --name: Replace **<WindowsVMNIC>** with the name of the VM's NIC you discovered earlier
+
+  
 
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
