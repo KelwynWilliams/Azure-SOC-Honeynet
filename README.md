@@ -199,23 +199,23 @@ Once inside the VM:
 
 ### 7.3. Set up SQL Server
 
-•	Install SQL Server Evaluation  <https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server-2019>
+a) Install SQL Server Evaluation  <https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server-2019>
 
 This can be downloaded online as an .exe file 
 
 Follow the installation steps provided:
 
 -	Feature Selection:	Database Engine Services
--	Instance ID:	MSSQLSERVER (Default)
+-	Instance ID:	**MSSQLSERVER** (Default)
 -	Server Config:	(Default)
--	Authen Mode:	Mixed Mode
--	Username:		sa (Default System Admin)
--	Password:		<Password>
--	Specify SQL Admin:Add Current User
+-	Authen Mode:	**Mixed Mode**
+-	Username:		**sa** (Default System Admin)
+-	Password:		<**Password**>
+-	Specify SQL Admin: **Add Current User**
 
-•	Install SSMS (SQL Server Management Studio): <https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms>
+b) Install SSMS (SQL Server Management Studio): <https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms>
 
-•	Enable logging for SQL Server to be ported into Windows Event Viewer
+c) Enable logging for SQL Server to be ported into Windows Event Viewer
 -	Link to step-by-step process available here: <https://learn.microsoft.com/en-us/sql/relational-databases/security/auditing/write-sql-server-audit-events-to-the-security-log?view=sql-server-ver16> 
 
 -	Provide full permission for the SQL Server service account to the registry hive:
@@ -229,19 +229,19 @@ Follow the installation steps provided:
 -	Enter “NETWORK SERVICES” and click OK
 -	Allow “Full Control” and Click Apply
 
-•	Open a command prompt with administrative permissions.
+d) Open a command prompt with administrative permissions.
 
-a.	From the Start menu, navigate to Command Prompt, and then select Run as administrator.
-b.	If the User Account Control dialog box opens, select Continue.
+- From the Start menu, navigate to Command Prompt, and then select Run as administrator.
+- If the User Account Control dialog box opens, select Continue.
 
-•	Execute the following statement to enable auditing from SQL Server.
+e) Execute the following statement to enable auditing from SQL Server.
 ```Powershell
 auditpol /set /subcategory:"application generated" /success:enable /failure:enable
 ```
 
-•	Close the command prompt window.
+f) Close the command prompt window.
 
-• Open SQL Server Management Studio (SSMS).
+g) Open SQL Server Management Studio (SSMS).
 -	Login using the System Admin (sa) credentials you set up earlier
 -	Once connected, right-click on the SQL Server (in the Object Explorer Box on the left-hand side)
 -	Click “Properties” > “Security” 
