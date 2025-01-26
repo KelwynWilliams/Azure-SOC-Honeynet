@@ -1069,9 +1069,13 @@ There are many ways in which I have chosen to secure our Azure Cloud architectur
 
 The NIST SP 800-53 Regulatory Compliance Recommendations from Microsoft Defender for Cloud provides a comprehensive framework for assessing and improving the security posture of cloud configurations by aligning them with NIST standards. It maps Azure resources and workloads to specific controls in NIST SP 800-53, offering actionable security recommendations, such as enabling encryption, enforcing least privilege access, and configuring logging. This helps organizations identify compliance gaps, implement best practices, and meet regulatory requirements, ultimately strengthening cloud security and reducing the risk of misconfigurations or breaches.
 
+In this step, we will enable MDC Regulatory Compliance Recommendations based on NIST SP 800-53. We will also implement a few the framework's suggested remediations.
+
 ### 5.1. Enable Microsoft Defender for Cloud Regulatory Compliance Recommendations based on NIST 800-53
 
-Microsoft Defender for Cloud > Regulatory Compliance > Manage Compliance Polices > Select Subscription > Security Policy > Industry & Regulatory Standards (Add more Standards) > Add NIST 800-53 (Latest Revision) > Review + Create with Default Settings
+Using the Azure Portal, Serch for "Microsoft Defender for Cloud"
+
+Select the Following: Regulatory Compliance > Manage Compliance Polices > Select Subscription > Security Policy > Industry & Regulatory Standards (Add more Standards) > Add NIST 800-53 (Latest Revision) > Review + Create with Default Settings
 
 
 ## Metrics After Hardening / Security Controls
