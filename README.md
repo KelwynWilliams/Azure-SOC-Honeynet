@@ -120,7 +120,7 @@ az network nic update \
   --network-security-group Honeynet-NSG
 ```
 **Parameters:**
-  --name: Replace <<"WindowsVMNIC">> with the name of the VM's NIC you discovered earlier
+  --name: Replace <<**WindowsVMNIC**>> with the name of the VM's NIC you discovered earlier
 
   
 
