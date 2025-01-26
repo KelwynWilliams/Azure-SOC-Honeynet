@@ -455,7 +455,7 @@ These are the Logs we will collect the following sources:
 - syslog (linux-vm)
 - Flow Logs (NSGs)
 
-**<u>Steps to Enable NSG Flow Logs</u>**
+#### Steps to Enable NSG Flow Logs
 
 #### 5.1. Enable Network Watcher
 
@@ -644,7 +644,6 @@ ContentHub: Built-in destination for AMA
 <**log-analytics-workspace-id**>: The resource ID of your Log Analytics workspace.
 
 
-
 f) Associate DCRs with VMs
 
 Associate the respective DCRs with the target VMs:
@@ -683,6 +682,48 @@ az monitor data-collection rule list --resource-group <resource-group-name>
 Check the DCR associations for a specific VM:
 ```Bash
 az monitor data-collection rule association list --resource <vm-id>
+```
+
+### 6. Create Diagnostics Settings in Microsoft Entra ID and Enable Audit and SignIn Logs (Tenant-Level Logging)
+
+Tenant-Level Logs in Azure focus on directory-wide activities and events in Microsoft Entra ID (Azure AD), including Audit Logs (records of changes to users, groups, and applications), Sign-In Logs (details of user and service principal authentication, including IP, location, and device), Provisioning Logs (automatic user/group provisioning to external systems), Risky Sign-In Logs (potentially compromised sign-ins flagged by identity protection), and Risk Detection Logs (indicators of security risks like unusual locations or leaked credentials). These logs are critical for monitoring and securing identity and access management across the tenant.
+
+#### 6.2. Identify the Log Analytics Workspace
+Retrieve the workspace ID where you want the logs to be sent:
+```Bash
+az monitor log-analytics workspace list \
+    --query "[].{Name:name, ID:id}" \
+    --output table
+```
+
+Note the ID of the desired workspace.
+
+
+#### 6.2. Create Diagnostics Settings
+
+Use the following command to create the diagnostics settings:
+```Bash
+az monitor diagnostic-settings create \
+    --name HoneynetEntraDS \
+    --resource-type "microsoft.aadiam/tenant" \
+    --workspace <log-analytics-workspace-id> \
+    --logs '[{"category": "AuditLogs", "enabled": true}, {"category": "SignInLogs", "enabled": true}]'
+```
+
+**Parameters:**
+--name <diagnostic-setting-name>: A name for the diagnostic settings (e.g., EntraAuditAndSignInLogs).
+--resource-type "microsoft.aadiam/tenant": Specifies that the diagnostics settings apply to Microsoft Entra ID (Azure AD).
+--workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the logs will be sent.
+--logs: Specifies the log categories (AuditLogs and SignInLogs) to enable and their status.
+
+
+#### 6.3. Verify Configuration
+
+To verify that the diagnostics settings were created, run:
+```Bash
+az monitor diagnostic-settings list \
+    --resource-type "microsoft.aadiam/tenant" \
+    --output table
 ```
 
 
