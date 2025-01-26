@@ -248,6 +248,54 @@ g) Open SQL Server Management Studio (SSMS).
 -	On “Login Auditing”, check “both failed and successful logins” and click OK
 -	Right click the SQL Server and click “Restart”
 
+## 8. Configure a Storage Account
+
+Here’s the command to create a storage account:
+```Bash
+az storage account create \
+    --name Honeynet-Storage \
+    --resource-group Honeynet-RG \
+    --location eastus \
+    --sku Standard_LRS \
+    --kind StorageV2
+```
+
+**Parameters:**
+--name: A globally unique name for the storage account (3-24 characters, alphanumeric, no special characters).
+--resource-group: The name of the resource group where the storage account will be created.
+--location: The Azure region (e.g., eastus, westus).
+--sku: The pricing tier (e.g., Standard_LRS, Standard_GRS, Premium_LRS).
+--kind: The type of storage account (e.g., StorageV2, Storage, BlobStorage).
+
+## 9. Configure a Key Vault
+
+Here's the command to create a Key Vault
+```Bash
+az keyvault create \
+    --name Honeynet-KeyVault \
+    --resource-group Honeynet-RG \
+    --location eastus \
+    --sku standard \
+    --enabled-for-deployment true \
+    --enabled-for-template-deployment true \
+    --enabled-for-disk-encryption true \
+    --enable-rbac-authorization false
+```
+
+**Parameters Explained:**
+--name: Specifies the name of the Key Vault (must be globally unique).
+--resource-group: The name of the resource group where the Key Vault will be created.
+--location: The Azure region where the Key Vault will be created (e.g., eastus, westeurope).
+--sku: Specifies the pricing tier of the Key Vault. Options are standard or premium.
+--enabled-for-deployment true: Allows Azure virtual machines to retrieve certificates from the Key Vault.
+--enabled-for-template-deployment true: Allows Azure Resource Manager templates to access the Key Vault.
+--enabled-for-disk-encryption true: Enables Azure Disk Encryption to retrieve secrets from the Key Vault.
+--enable-rbac-authorization false: Configures the Key Vault to use the Vault access policy permission model instead of Role-Based Access Control (RBAC).
+
+
+
+
+
 
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
