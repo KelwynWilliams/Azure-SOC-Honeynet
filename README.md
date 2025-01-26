@@ -447,6 +447,243 @@ Verify Data Collection Rule (DCR):
 az monitor data-collection rule list --output table
 ```
 
+### 5. Enable Log Collection from Virtual Machines (VMs) and Network Security Groups (NSGs)
+
+These are the Logs we will collect the following sources:
+
+- Window Event Logs (windows-vm)
+- syslog (linux-vm)
+- Flow Logs (NSGs)
+
+Steps to Enable NSG Flow Logs
+
+#### 5.1. Enable Network Watcher
+
+Ensure Network Watcher is enabled in the region where your NSG resides:
+```Bash
+az network watcher configure \
+    --locations eastus \
+    --resource-group Honeynet-RG \
+    --enabled true
+```
+#### 5.2. Enable NSG Flow Logs
+
+Run the following command to enable flow logs for VM NSGs:
+
+**WINDOWS VM NSG** (NSG **NOT** currently enabled, Generated on VM Creation, will use during VM Hardening)
+```Bash
+az network watcher flow-log create \
+    --location eastus \
+    --name Windows-FlowLog \
+    --nsg Windows-nsg \
+    --resource-group Honeynet-RG \
+    --storage-account Honeynet-Storage \
+    --enabled true
+```
+
+**LINUX VM NSG** (NSG **NOT** currently enabled, Generated on VM Creation, will use during VM Hardening)
+```Bash
+az network watcher flow-log create \
+    --location eastus \
+    --name Linux-FlowLog \
+    --nsg Linux-nsg \
+    --resource-group Honeynet-RG \
+    --storage-account Honeynet-Storage \
+    --enabled true
+```
+
+**Honeynet NSG** (NSG currently enabled, associated to both Windows & Linux NICs, created to open VM's to the Internet)
+```Bash
+az network watcher flow-log create \
+    --location eastus \
+    --name Honeynet-FlowLog \
+    --nsg Honeynet-NSG \
+    --resource-group Honeynet-RG \
+    --storage-account Honeynet-Storage \
+    --enabled true
+```
+
+**Parameters:**
+
+--location: The region where the NSG and Network Watcher are located.
+--name: A name for the flow log.
+--nsg: The name of the NSG for which you want to enable flow logs.
+--resource-group: The resource group containing the NSG and storage account.
+--storage-account: The name of the storage account where logs will be stored.
+
+
+
+#### 5.3. Enable Traffic Analytics
+
+To enable traffic analytics for additional insights:
+
+**WINDOWS VM FLOW LOG**
+```Bash
+az network watcher flow-log update \
+    --location eastus \
+    --name Windows-FlowLog \
+    --nsg Windows-nsg \
+    --resource-group Honeynet-RG\
+    --traffic-analytics \
+    --workspace <log-analytics-workspace-id> \
+    --enabled true
+```
+
+**LINUX VM FLOW LOG**
+```Bash
+az network watcher flow-log update \
+    --location eastus \
+    --name Linux-FlowLog \
+    --nsg Linux-nsg \
+    --resource-group Honeynet-RG \
+    --traffic-analytics \
+    --workspace <log-analytics-workspace-id> \
+    --enabled true
+```
+
+**HONEYNET FLOW LOG**
+```Bash
+az network watcher flow-log update \
+    --location eastus \
+    --name Honeynet-FlowLog \
+    --nsg Honeynet-NSG \
+    --resource-group Honeynet-RG \
+    --traffic-analytics \
+    --workspace <log-analytics-workspace-id> \
+    --enabled true
+```
+
+• <**log-analytics-workspace-id**>: The ID of your Log Analytics workspace (can be retrieved using az monitor log-analytics workspace list).
+
+****Note: You can retrieve the ID of any resource in azure using the following command:**
+```Bash
+az vm show \
+    --name <resource-name> \
+    --resource-group Honeynet-RG \
+    --query “id” \
+    --output tsv
+```
+
+**Parameters:**
+--name: Name of the Resource.
+--resource-group: Name of the Resource Group.
+--query “id”: Filters the output to return only the Resource ID
+--output tsv: Outputs the ID as plain text
+
+
+#### 5.4 Steps to Configure Data Collection Rules (DCRs)
+
+a) Install AMA for Windows VM
+```Bash
+az vm extension set \
+    --publisher Microsoft.Azure.Monitor \
+    --name WindowsAMA \
+    --vm-name windows-vm \
+    --resource-group Honeynet-RG \
+    --location eastus
+```
+
+b) Install AMA for Linux VM
+```Bash
+az vm extension set \
+    --publisher Microsoft.Azure.Monitor \
+    --name LinuxAMA \
+    --vm-name linux-vm \
+    --resource-group Honeynet-RG \
+    --location eastus
+```
+
+**Parameters:**
+--publisher: Specifies the publisher of the VM extension (For AMA, the publisher is “Microsoft.Azure.Monitor”)
+--vm-name: Name of the VM.
+--vm-name: Name of the VM.
+--resource-group: Name of the resource group containing the VM.
+--location: The Azure region of the VM.
+
+c) Verify AMA Installation
+
+To verify the installation of the AMA extension:
+```Bash
+az vm extension list \
+    --vm-name <vm-name> \
+    --resource-group Honeynet-RG \
+    --output table
+```
+
+d) Create a Data Collection Rule for Windows VM
+
+Run the following command to create a DCR for Windows Security Events, with all event logs enabled.
+```Bash
+az monitor data-collection rule create \
+    --resource-group Honeynet-RG \
+    --name Windows-dcr \
+    --location eastus \
+    --data-flows '[{"streams": ["Microsoft-SecurityEvent"], "destinations": ["ContentHub"]}]' \
+    --destinations '[{"name": "ContentHub", "resourceId": "<log-analytics-workspace-id>"}]' \
+    --data-sources '[{"stream": "Microsoft-SecurityEvent", "eventLog": {"xPathQueries": ["*"]}}]'
+```
+
+e) Create a Data Collection Rule for Linux VM
+
+Run the following command to create a DCR for Linux VMs to collect syslog auth debug data.
+```Bash
+az monitor data-collection rule create \
+    --resource-group Honeynet-RG \
+    --name Linux-dcr \
+    --location eastus \
+    --data-flows '[{"streams": ["Syslog"], "destinations": ["ContentHub"]}]' \
+    --destinations '[{"name": "ContentHub", "resourceId": "<log-analytics-workspace-id>"}]' \
+    --data-sources '[{"stream": "Syslog", "syslog": {"facilityNames": ["auth"], "logLevels": ["debug"]}}]'
+```
+
+**Parameters:**
+--resource-group: The name of the resource group.
+--name: A name for the Data Collection Rule (e.g., Windows-dcr).
+--location: Azure region (e.g., eastus).
+ContentHub: Built-in destination for AMA
+<**log-analytics-workspace-id**>: The resource ID of your Log Analytics workspace.
+
+
+
+f) Associate DCRs with VMs
+
+Associate the respective DCRs with the target VMs:
+
+For Windows VM:
+```Bash
+az monitor data-collection rule association create \
+    --resource-group Honeynet-RG \
+    --rule-name Window-dcr \
+    --resource <windows-vm-id> \
+    --association-name WindowsDCRAssoc
+```
+
+For Linux VM:
+```Bash
+az monitor data-collection rule association create \
+    --resource-group Honeynet-RG \
+    --rule-name Linux-dcr \
+    --resource <linux-vm-id> \
+    --association-name LinuxDCRAssoc
+```
+
+**Parameters:**
+
+--rule-name: The name of the Data Collection Rule (DCR).
+--resource: The resource ID of your VM.
+--association-name: A unique name for the DCR association (e.g., WindowsDCRAssoc).
+
+
+g) Verification
+
+List the DCRs in your resource group:
+```Bash
+az monitor data-collection rule list --resource-group <resource-group-name>
+```
+Check the DCR associations for a specific VM:
+```Bash
+az monitor data-collection rule association list --resource <vm-id>
+```
 
 
 
