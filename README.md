@@ -261,11 +261,11 @@ az storage account create \
 ```
 
 **Parameters:**
---name: A globally unique name for the storage account (3-24 characters, alphanumeric, no special characters).
---resource-group: The name of the resource group where the storage account will be created.
---location: The Azure region (e.g., eastus, westus).
---sku: The pricing tier (e.g., Standard_LRS, Standard_GRS, Premium_LRS).
---kind: The type of storage account (e.g., StorageV2, Storage, BlobStorage).
+--name: A globally unique name for the storage account (3-24 characters, alphanumeric, no special characters).  
+--resource-group: The name of the resource group where the storage account will be created.  
+--location: The Azure region (e.g., eastus, westus).  
+--sku: The pricing tier (e.g., Standard_LRS, Standard_GRS, Premium_LRS).  
+--kind: The type of storage account (e.g., StorageV2, Storage, BlobStorage).  
 
 ### 9. Configure a Key Vault
 
@@ -283,14 +283,14 @@ az keyvault create \
 ```
 
 **Parameters Explained:**
---name: Specifies the name of the Key Vault (must be globally unique).
---resource-group: The name of the resource group where the Key Vault will be created.
---location: The Azure region where the Key Vault will be created (e.g., eastus, westeurope).
---sku: Specifies the pricing tier of the Key Vault. Options are standard or premium.
---enabled-for-deployment true: Allows Azure virtual machines to retrieve certificates from the Key Vault.
---enabled-for-template-deployment true: Allows Azure Resource Manager templates to access the Key Vault.
---enabled-for-disk-encryption true: Enables Azure Disk Encryption to retrieve secrets from the Key Vault.
---enable-rbac-authorization false: Configures the Key Vault to use the Vault access policy permission model instead of Role-Based Access Control (RBAC).
+--name: Specifies the name of the Key Vault (must be globally unique).  
+--resource-group: The name of the resource group where the Key Vault will be created.  
+--location: The Azure region where the Key Vault will be created (e.g., eastus, westeurope).  
+--sku: Specifies the pricing tier of the Key Vault. Options are standard or premium.  
+--enabled-for-deployment true: Allows Azure virtual machines to retrieve certificates from the Key Vault.  
+--enabled-for-template-deployment true: Allows Azure Resource Manager templates to access the Key Vault.  
+--enabled-for-disk-encryption true: Enables Azure Disk Encryption to retrieve secrets from the Key Vault.  
+--enable-rbac-authorization false: Configures the Key Vault to use the Vault access policy permission model instead of Role-Based Access Control (RBAC).  
 
 Next, we will need to ensure that all the Logs and metrics from are ingested and flow through to our Logs Analytics Workspace. This will later be used by Windows Sentinel to build attack maps, trigger alerts, and create incidents.
 
@@ -306,9 +306,9 @@ az monitor log-analytics workspace create \
 ```
 
 **Parameters:**
---resource-group: The resource group where the workspace will reside.
---workspace-name: Name of the Log Analytics workspace.
---location: Azure region where the workspace will be created.
+--resource-group: The resource group where the workspace will reside.  
+--workspace-name: Name of the Log Analytics workspace.  
+--location: Azure region where the workspace will be created.  
 
 ### 2. Enable Microsoft Sentinel
 
@@ -320,8 +320,8 @@ az sentinel create \
 ```
 
 **Parameters:**
---resource-group: The resource group containing the Log Analytics workspace.
---workspace-name: Name of the workspace on which to enable Microsoft Sentinel.
+--resource-group: The resource group containing the Log Analytics workspace.  
+--workspace-name: Name of the workspace on which to enable Microsoft Sentinel.  
 
 ### 3. Create the Watchlist
 
@@ -338,13 +338,13 @@ az sentinel watchlist create \
 ```
 
 **Parameters:**
---resource-group: The name of the resource group.
---workspace-name: The name of the Log Analytics workspace associated with Microsoft Sentinel.
---watchlist-name: A unique name for the watchlist.
---alias: An optional,  unique identifier for the watchlist.
---description: A brief description of the watchlist’s purpose.
---file: Path to the .csv file containing the watchlist data.
---items-search-key: The key column name in your CSV that will be used to query the watchlist (e.g., network in this case).
+--resource-group: The name of the resource group.  
+--workspace-name: The name of the Log Analytics workspace associated with Microsoft Sentinel.  
+--watchlist-name: A unique name for the watchlist.  
+--alias: An optional,  unique identifier for the watchlist.  
+--description: A brief description of the watchlist’s purpose.  
+--file: Path to the .csv file containing the watchlist data.  
+--items-search-key: The key column name in your CSV that will be used to query the watchlist (e.g., network in this case).  
 
 ### 4. Enable Microsoft Defender for Cloud
 
@@ -371,8 +371,8 @@ az security pricing create --name KeyVaults --tier Standard
 
 **Parameters:**
 
---name: The Defender Plan to Enable (VirtualMachines, SqlServers, StorageAccounts, KeyVaults)
---tier: The tier of the Defender plan. Set to standard to enable the full set of features for that resource
+--name: The Defender Plan to Enable (VirtualMachines, SqlServers, StorageAccounts, KeyVaults)  
+--tier: The tier of the Defender plan. Set to standard to enable the full set of features for that resource  
 
 
 #### 4.2. Enable Windows Defender for Cloud for Log Analytics Workspace
@@ -389,9 +389,9 @@ az security setting update \
 
 **Parameters:**
 
---name: The setting to enable (e.g. MCAS for Defender integration with the workspace)
---value: Set to Enabled to activate Defender for Cloud integration
---workspace-id: The full resource ID of the Log Analytics Workspace
+--name: The setting to enable (e.g. MCAS for Defender integration with the workspace)  
+--value: Set to Enabled to activate Defender for Cloud integration  
+--workspace-id: The full resource ID of the Log Analytics Workspace  
 
 You can retrieve this ID with:
 ```Bash
@@ -414,8 +414,8 @@ az security setting update \
 ```
 
 **Parameters:**
---name: The name of the Setting (ContinuousExport)
---workspace-id: The full resource ID of the Log Analytics Workspace
+--name: The name of the Setting (ContinuousExport)  
+--workspace-id: The full resource ID of the Log Analytics Workspace  
 
 #### 4.4. Ensure Collection of All Windows Security Events
 
@@ -505,11 +505,11 @@ az network watcher flow-log create \
 
 **Parameters:**
 
---location: The region where the NSG and Network Watcher are located.
---name: A name for the flow log.
---nsg: The name of the NSG for which you want to enable flow logs.
---resource-group: The resource group containing the NSG and storage account.
---storage-account: The name of the storage account where logs will be stored.
+--location: The region where the NSG and Network Watcher are located.  
+--name: A name for the flow log.  
+--nsg: The name of the NSG for which you want to enable flow logs.  
+--resource-group: The resource group containing the NSG and storage account.  
+--storage-account: The name of the storage account where logs will be stored.  
 
 
 
@@ -565,10 +565,10 @@ az vm show \
 ```
 
 **Parameters:**
---name: Name of the Resource.
---resource-group: Name of the Resource Group.
---query “id”: Filters the output to return only the Resource ID
---output tsv: Outputs the ID as plain text
+--name: Name of the Resource.  
+--resource-group: Name of the Resource Group.  
+--query “id”: Filters the output to return only the Resource ID  
+--output tsv: Outputs the ID as plain text  
 
 
 #### 5.4 Steps to Configure Data Collection Rules (DCRs)
@@ -594,11 +594,11 @@ az vm extension set \
 ```
 
 **Parameters:**
---publisher: Specifies the publisher of the VM extension (For AMA, the publisher is “Microsoft.Azure.Monitor”)
---vm-name: Name of the VM.
---vm-name: Name of the VM.
---resource-group: Name of the resource group containing the VM.
---location: The Azure region of the VM.
+--publisher: Specifies the publisher of the VM extension (For AMA, the publisher is “Microsoft.Azure.Monitor”)  
+--vm-name: Name of the VM.  
+--vm-name: Name of the VM.  
+--resource-group: Name of the resource group containing the VM.  
+--location: The Azure region of the VM.  
 
 c) Verify AMA Installation
 
@@ -637,11 +637,11 @@ az monitor data-collection rule create \
 ```
 
 **Parameters:**
---resource-group: The name of the resource group.
---name: A name for the Data Collection Rule (e.g., Windows-dcr).
---location: Azure region (e.g., eastus).
-ContentHub: Built-in destination for AMA
-<**log-analytics-workspace-id**>: The resource ID of your Log Analytics workspace.
+--resource-group: The name of the resource group.  
+--name: A name for the Data Collection Rule (e.g., Windows-dcr).  
+--location: Azure region (e.g., eastus).  
+ContentHub: Built-in destination for AMA  
+<**log-analytics-workspace-id**>: The resource ID of your Log Analytics workspace.  
 
 
 f) Associate DCRs with VMs
@@ -668,16 +668,16 @@ az monitor data-collection rule association create \
 
 **Parameters:**
 
---rule-name: The name of the Data Collection Rule (DCR).
---resource: The resource ID of your VM.
---association-name: A unique name for the DCR association (e.g., WindowsDCRAssoc).
+--rule-name: The name of the Data Collection Rule (DCR).  
+--resource: The resource ID of your VM.  
+--association-name: A unique name for the DCR association (e.g., WindowsDCRAssoc).  
 
 
 g) Verification
 
 List the DCRs in your resource group:
 ```Bash
-az monitor data-collection rule list --resource-group <resource-group-name>
+az monitor data-collection rule list --resource-group Honeynet-RG
 ```
 Check the DCR associations for a specific VM:
 ```Bash
@@ -711,10 +711,10 @@ az monitor diagnostic-settings create \
 ```
 
 **Parameters:**
---name <diagnostic-setting-name>: A name for the diagnostic settings (e.g., EntraAuditAndSignInLogs).
---resource-type "microsoft.aadiam/tenant": Specifies that the diagnostics settings apply to Microsoft Entra ID (Azure AD).
---workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the logs will be sent.
---logs: Specifies the log categories (AuditLogs and SignInLogs) to enable and their status.
+--name <diagnostic-setting-name>: A name for the diagnostic settings (e.g., EntraAuditAndSignInLogs).  
+--resource-type "microsoft.aadiam/tenant": Specifies that the diagnostics settings apply to Microsoft Entra ID.  
+--workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the logs will be sent.  
+--logs: Specifies the log categories (AuditLogs and SignInLogs) to enable and their status.  
 
 
 #### 6.3. Verify Configuration
@@ -751,10 +751,10 @@ az monitor diagnostic-settings create \
 ```
 
 **Parameters:**
---name: The name for the diagnostic setting (e.g., ActivityLogDS).
---resource "/subscriptions/<subscription-id>": Specifies the subscription for which activity logs are being exported. Replace <subscription-id> with your subscription ID.
---workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the activity logs will be sent.
---logs: A JSON array specifying all activity log categories to export, with enabled set to true.
+--name: The name for the diagnostic setting (e.g., ActivityLogDS).  
+--resource "/subscriptions/<subscription-id>": Specifies the subscription for which activity logs are being exported. Replace <subscription-id> with your subscription ID.  
+--workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the activity logs will be sent.  
+--logs: A JSON array specifying all activity log categories to export, with enabled set to true.  
 
 
 #### 7.3. Verify Configuration
@@ -783,10 +783,10 @@ az monitor diagnostic-settings create \
 ```
 
 **Parameters:**
---name <diagnostic-setting-name>: The name for the diagnostic setting (e.g., StorageAuditLogs).
---resource: The full resource ID of the Storage Account.
---workspace: The ID of the Log Analytics Workspace where the logs will be sent.
---logs '[{"category": "AuditLogs", "enabled": true}]': Specifies that AuditLogs should be enabled for the Storage Account.
+--name <diagnostic-setting-name>: The name for the diagnostic setting (e.g., StorageAuditLogs).  
+--resource: The full resource ID of the Storage Account.  
+--workspace: The ID of the Log Analytics Workspace where the logs will be sent.  
+--logs '[{"category": "AuditLogs", "enabled": true}]': Specifies that AuditLogs should be enabled for the Storage Account.  
 
 
 #### 8.2. Verify Configuration
@@ -810,10 +810,10 @@ az monitor diagnostic-settings create \
 ```
 
 **Parameters:**
---name <diagnostic-setting-name>: Name of the diagnostic setting (e.g., KeyVaultAuditLogs).
---resource: The full resource ID of the Key Vault.
---workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the logs will be sent. 
---logs '[{"category": "AuditEvent", "enabled": true}]': Specifies the log category (AuditEvent) to enable.
+--name <diagnostic-setting-name>: Name of the diagnostic setting (e.g., KeyVaultAuditLogs).  
+--resource: The full resource ID of the Key Vault.  
+--workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the logs will be sent.  
+--logs '[{"category": "AuditEvent", "enabled": true}]': Specifies the log category (AuditEvent) to enable.  
 
 
 #### 8.4. Verify Configuration
