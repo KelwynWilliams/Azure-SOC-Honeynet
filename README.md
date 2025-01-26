@@ -296,6 +296,32 @@ Next, we will need to ensure that all the Logs and metrics from are ingested and
 
 ## Step 2: Logging and Monitoring
 
+### 1. Create a Log Analytics Workspace
+
+```Bash
+az monitor log-analytics workspace create \
+  --resource-group "Honeynet-RG" \
+  --workspace-name "Honeynet-LAW" \
+  --location "eastus"
+```
+
+**Parameters:**
+--resource-group: The resource group where the workspace will reside.
+--workspace-name: Name of the Log Analytics workspace.
+--location: Azure region where the workspace will be created.
+
+### 2. Enable Microsoft Sentinel
+
+Enable Microsoft Sentinel on the created Log Analytics workspace:
+```Bash
+az sentinel create \
+  --resource-group "Honeynet-RG" \
+  --workspace-name "Honeynet-LAW"
+```
+
+**Parameters:**
+--resource-group: The resource group containing the Log Analytics workspace.
+--workspace-name: Name of the workspace on which to enable Microsoft Sentinel.
 
 
 
