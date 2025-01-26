@@ -885,6 +885,68 @@ az role assignment list \
   --all
 ```
 
+### 2. Subscription Reader
+
+The Reader role provides read-only access to Azure resources. A user assigned this role can:
+- View all resources within the assigned subscription.
+- Read resource properties and configurations.
+- Monitor and view metrics or logs.
+- Access dashboards and reports.
+
+Key Characteristics:
+- No Write Access: The user cannot create, modify, or delete resources.
+- Subscription-Level Scope: Permissions are limited to resources within the assigned subscription.
+
+#### 2.1. Create a User Account
+```Bash
+az ad user create \
+  --display-name "Subscription Reader User" \
+  --user-principal-name readeruser@example.com \
+  --password "YourSecurePassword123!"
+```
+**Parameters:**  
+--display-name: The friendly name of the user displayed in Microsoft Entra ID.  
+--user-principal-name: The user’s unique login name (e.g., user@yourdomain.com).  
+--password: A strong password for the user. Must meet complexity requirements.  
+
+#### 2.2. Assign the Reader Role
+
+Assign the Reader role to the user at the subscription level. First, identify the subscription ID where you want to assign the role:
+
+a) Retrieve Subscription ID:
+```Bash
+az account list --output table
+```
+
+This will display a list of subscriptions with their IDs. Copy the relevant Subscription ID.
+
+b) Assign the Reader Role:
+```Bash
+az role assignment create \
+  --assignee readeruser@example.com \
+  --role "Reader" \
+  --scope "/subscriptions/<subscription-id>"
+```
+
+**Parameters:**  
+--assignee: The user or identity receiving the role. You can provide:  
+• User Principal Name (e.g., readeruser@example.com),  
+• Object ID, or  
+• Service Principal ID.  
+--role: The name of the role being assigned. Here, it is "Reader".  
+--scope: The level at which the role applies. For subscription-level permissions, use:  
+• /subscriptions/<subscription-id>.
+
+#### 2.3. Verify Role Assignment
+
+To confirm the user has the Reader role, run:
+```Bash
+az role assignment list \
+  --assignee readeruser@example.com \
+  --scope "/subscriptions/<subscription-id>" \
+  --output table
+```
+
 
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
