@@ -119,7 +119,7 @@ az network nic update \
   --name <WindowsVMNIC> \
   --network-security-group Honeynet-NSG
 ```
-**Parameters:**
+**Parameters:**  
   --name: Replace <**WindowsVMNIC**> with the name of the VM's NIC you discovered earlier
   
 ### 6. Configure Linux Virtual Machine
@@ -158,7 +158,7 @@ az network nic update \
   --name <LinuxVMNIC> \
   --network-security-group Honeynet-NSG
  ``` 
-**Parameters:**
+**Parameters:**  
   --name: Replace <**LinuxVMNIC**> with the name of the VM's NIC you discovered earlier
   
 
@@ -260,7 +260,7 @@ az storage account create \
     --kind StorageV2
 ```
 
-**Parameters:**
+**Parameters:**  
 --name: A globally unique name for the storage account (3-24 characters, alphanumeric, no special characters).  
 --resource-group: The name of the resource group where the storage account will be created.  
 --location: The Azure region (e.g., eastus, westus).  
@@ -282,7 +282,7 @@ az keyvault create \
     --enable-rbac-authorization false
 ```
 
-**Parameters Explained:**
+**Parameters Explained:**  
 --name: Specifies the name of the Key Vault (must be globally unique).  
 --resource-group: The name of the resource group where the Key Vault will be created.  
 --location: The Azure region where the Key Vault will be created (e.g., eastus, westeurope).  
@@ -305,7 +305,7 @@ az monitor log-analytics workspace create \
   --location "eastus"
 ```
 
-**Parameters:**
+**Parameters:**  
 --resource-group: The resource group where the workspace will reside.  
 --workspace-name: Name of the Log Analytics workspace.  
 --location: Azure region where the workspace will be created.  
@@ -319,7 +319,7 @@ az sentinel create \
   --workspace-name "Honeynet-LAW"
 ```
 
-**Parameters:**
+**Parameters:**  
 --resource-group: The resource group containing the Log Analytics workspace.  
 --workspace-name: Name of the workspace on which to enable Microsoft Sentinel.  
 
@@ -337,7 +337,7 @@ az sentinel watchlist create \
   --items-search-key "network"
 ```
 
-**Parameters:**
+**Parameters:**  
 --resource-group: The name of the resource group.  
 --workspace-name: The name of the Log Analytics workspace associated with Microsoft Sentinel.  
 --watchlist-name: A unique name for the watchlist.  
@@ -369,7 +369,7 @@ az security pricing create --name StorageAccounts --tier Standard
 az security pricing create --name KeyVaults --tier Standard
 ```
 
-**Parameters:**
+**Parameters:**  
 
 --name: The Defender Plan to Enable (VirtualMachines, SqlServers, StorageAccounts, KeyVaults)  
 --tier: The tier of the Defender plan. Set to standard to enable the full set of features for that resource  
@@ -387,7 +387,7 @@ az security setting update \
   --workspace-id "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.OperationalInsights/workspaces/Honeynet-LAW"
 ```
 
-**Parameters:**
+**Parameters:**  
 
 --name: The setting to enable (e.g. MCAS for Defender integration with the workspace)  
 --value: Set to Enabled to activate Defender for Cloud integration  
@@ -413,7 +413,7 @@ az security setting update \
   --value Enabled
 ```
 
-**Parameters:**
+**Parameters:**  
 --name: The name of the Setting (ContinuousExport)  
 --workspace-id: The full resource ID of the Log Analytics Workspace  
 
@@ -503,7 +503,7 @@ az network watcher flow-log create \
     --enabled true
 ```
 
-**Parameters:**
+**Parameters:**  
 
 --location: The region where the NSG and Network Watcher are located.  
 --name: A name for the flow log.  
@@ -564,7 +564,7 @@ az vm show \
     --output tsv
 ```
 
-**Parameters:**
+**Parameters:**  
 --name: Name of the Resource.  
 --resource-group: Name of the Resource Group.  
 --query “id”: Filters the output to return only the Resource ID  
@@ -593,7 +593,7 @@ az vm extension set \
     --location eastus
 ```
 
-**Parameters:**
+**Parameters:**  
 --publisher: Specifies the publisher of the VM extension (For AMA, the publisher is “Microsoft.Azure.Monitor”)  
 --vm-name: Name of the VM.  
 --vm-name: Name of the VM.  
@@ -636,7 +636,7 @@ az monitor data-collection rule create \
     --data-sources '[{"stream": "Syslog", "syslog": {"facilityNames": ["auth"], "logLevels": ["debug"]}}]'
 ```
 
-**Parameters:**
+**Parameters:**  
 --resource-group: The name of the resource group.  
 --name: A name for the Data Collection Rule (e.g., Windows-dcr).  
 --location: Azure region (e.g., eastus).  
@@ -666,7 +666,7 @@ az monitor data-collection rule association create \
     --association-name LinuxDCRAssoc
 ```
 
-**Parameters:**
+**Parameters:**  
 
 --rule-name: The name of the Data Collection Rule (DCR).  
 --resource: The resource ID of your VM.  
@@ -710,7 +710,7 @@ az monitor diagnostic-settings create \
     --logs '[{"category": "AuditLogs", "enabled": true}, {"category": "SignInLogs", "enabled": true}]'
 ```
 
-**Parameters:**
+**Parameters:**  
 --name <diagnostic-setting-name>: A name for the diagnostic settings (e.g., EntraAuditAndSignInLogs).  
 --resource-type "microsoft.aadiam/tenant": Specifies that the diagnostics settings apply to Microsoft Entra ID.  
 --workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the logs will be sent.  
@@ -750,7 +750,7 @@ az monitor diagnostic-settings create \
     --logs '[{"category": "Administrative", "enabled": true}, {"category": "Security", "enabled": true}, {"category": "ServiceHealth", "enabled": true}, {"category": "Alert", "enabled": true}, {"category": "Recommendation", "enabled": true}, {"category": "Policy", "enabled": true}, {"category": "Autoscale", "enabled": true}, {"category": "ResourceHealth", "enabled": true}]'
 ```
 
-**Parameters:**
+**Parameters:**  
 --name: The name for the diagnostic setting (e.g., ActivityLogDS).  
 --resource "/subscriptions/<subscription-id>": Specifies the subscription for which activity logs are being exported. Replace <subscription-id> with your subscription ID.  
 --workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the activity logs will be sent.  
@@ -782,7 +782,7 @@ az monitor diagnostic-settings create \
     --logs '[{"category": "AuditLogs", "enabled": true}]'
 ```
 
-**Parameters:**
+**Parameters:**  
 --name <diagnostic-setting-name>: The name for the diagnostic setting (e.g., StorageAuditLogs).  
 --resource: The full resource ID of the Storage Account.  
 --workspace: The ID of the Log Analytics Workspace where the logs will be sent.  
@@ -809,7 +809,7 @@ az monitor diagnostic-settings create \
     --logs '[{"category": "AuditEvent", "enabled": true}]'
 ```
 
-**Parameters:**
+**Parameters:**  
 --name <diagnostic-setting-name>: Name of the diagnostic setting (e.g., KeyVaultAuditLogs).  
 --resource: The full resource ID of the Key Vault.  
 --workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the logs will be sent.  
