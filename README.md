@@ -185,7 +185,7 @@ Log in with the admin username and password you set earlier.
 
 ### 7.2. Turn Off Windows Defender Firewall
 
-In order for our 
+In order for our Windows VM to be discoverable over the internet, we have to disable the Windows Defender Firewall within the VM
 
 Once inside the VM:
 
@@ -197,10 +197,14 @@ Once inside the VM:
 
 ![Turn off Windows Firewall (2)](https://github.com/user-attachments/assets/3a8e81df-4c3d-4576-8295-e5343c9e017d)
 
+### 7.3. Set up SQL Server
 
 •	Install SQL Server Evaluation  <https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server-2019>
--	This can be downloaded online as an .exe file 
--	Follow the installation steps provided
+
+This can be downloaded online as an .exe file 
+
+Follow the installation steps provided:
+
 -	Feature Selection:	Database Engine Services
 -	Instance ID:	MSSQLSERVER (Default)
 -	Server Config:	(Default)
@@ -212,7 +216,7 @@ Once inside the VM:
 •	Install SSMS (SQL Server Management Studio): <https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms>
 
 •	Enable logging for SQL Server to be ported into Windows Event Viewer
--	Link to step-by-step process available here: https://learn.microsoft.com/en-us/sql/relational-databases/security/auditing/write-sql-server-audit-events-to-the-security-log?view=sql-server-ver16 
+-	Link to step-by-step process available here: <https://learn.microsoft.com/en-us/sql/relational-databases/security/auditing/write-sql-server-audit-events-to-the-security-log?view=sql-server-ver16> 
 
 -	Provide full permission for the SQL Server service account to the registry hive:
 
@@ -225,17 +229,17 @@ Once inside the VM:
 -	Enter “NETWORK SERVICES” and click OK
 -	Allow “Full Control” and Click Apply
 
-### 7.3. Open a command prompt with administrative permissions.
+•	Open a command prompt with administrative permissions.
 
 a.	From the Start menu, navigate to Command Prompt, and then select Run as administrator.
 b.	If the User Account Control dialog box opens, select Continue.
 
-3.	Execute the following statement to enable auditing from SQL Server.
+•	Execute the following statement to enable auditing from SQL Server.
 ```Powershell
 auditpol /set /subcategory:"application generated" /success:enable /failure:enable
 ```
 
-6.	Close the command prompt window.
+•	Close the command prompt window.
 
 • Open SQL Server Management Studio (SSMS).
 -	Login using the System Admin (sa) credentials you set up earlier
