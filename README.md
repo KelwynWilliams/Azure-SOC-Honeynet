@@ -162,9 +162,9 @@ az network nic update \
   --name: Replace <**LinuxVMNIC**> with the name of the VM's NIC you discovered earlier
   
 
-## 7. Configure the SQL Server within the Windows VM
+### 7. Configure the SQL Server within the Windows VM
 
-### 7.1. Connect to the VM
+#### 7.1. Connect to the VM
 Identify the Windows VM's Public IP address using the following command:
 ```Bash
 az vm list-ip-addresses
@@ -183,7 +183,7 @@ mstsc /v:<Windows VM-Public-IP-Address>
 Log in with the admin username and password you set earlier.
 
 
-### 7.2. Turn Off Windows Defender Firewall
+#### 7.2. Turn Off Windows Defender Firewall
 
 In order for our Windows VM to be discoverable over the internet, we have to disable the Windows Defender Firewall within the VM
 
@@ -197,7 +197,7 @@ Once inside the VM:
 
 ![Turn off Windows Firewall (2)](https://github.com/user-attachments/assets/3a8e81df-4c3d-4576-8295-e5343c9e017d)
 
-### 7.3. Set up SQL Server
+#### 7.3. Set up SQL Server
 
 a) Install SQL Server Evaluation  <https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server-2019>
 
@@ -248,7 +248,7 @@ g) Open SQL Server Management Studio (SSMS).
 -	On “Login Auditing”, check “both failed and successful logins” and click OK
 -	Right click the SQL Server and click “Restart”
 
-## 8. Configure a Storage Account
+### 8. Configure a Storage Account
 
 Here’s the command to create a storage account:
 ```Bash
@@ -267,7 +267,7 @@ az storage account create \
 --sku: The pricing tier (e.g., Standard_LRS, Standard_GRS, Premium_LRS).
 --kind: The type of storage account (e.g., StorageV2, Storage, BlobStorage).
 
-## 9. Configure a Key Vault
+### 9. Configure a Key Vault
 
 Here's the command to create a Key Vault
 ```Bash
@@ -292,6 +292,9 @@ az keyvault create \
 --enabled-for-disk-encryption true: Enables Azure Disk Encryption to retrieve secrets from the Key Vault.
 --enable-rbac-authorization false: Configures the Key Vault to use the Vault access policy permission model instead of Role-Based Access Control (RBAC).
 
+Next, we will need to ensure that all the Logs and metrics from are ingested and flow through to our Logs Analytics Workspace. This will later be used by Windows Sentinel to build attack maps, trigger alerts, and create incidents.
+
+## Step 2: Logging and Monitoring
 
 
 
