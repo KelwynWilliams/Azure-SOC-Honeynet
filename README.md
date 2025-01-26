@@ -947,6 +947,76 @@ az role assignment list \
   --output table
 ```
 
+### 3. Resource Group Contributor
+
+The Contributor role provides full access to manage resources within the specified scope. A user with this role can:
+- Create, modify, and delete resources within the assigned resource group.
+- Manage resource configurations and properties.
+- Deploy or remove resources using templates or scripts.
+- View resource properties and monitor metrics.
+
+Key Characteristics:
+- No Access to Billing: The Contributor role does not include permissions to manage billing or assign roles.
+- Resource Group-Level Scope: Access is restricted to the resources in the specified resource group.
+
+
+#### 3.1. Create a User Account
+```Bash
+az ad user create \
+  --display-name "Resource Group Contributor" \
+  --user-principal-name contributoruser@example.com \
+  --password "YourSecurePassword123!"
+```
+
+**Parameters:**  
+--display-name: The name of the user displayed in Microsoft Entra ID.  
+--user-principal-name: The unique login name for the user (e.g., user@yourdomain.com).  
+--password: A secure password that complies with Azure’s password policies.  
+
+#### 3.2. Assign the Contributor Role at the Resource Group Level
+
+a) Retrieve the Resource Group Name  
+
+To list all resource groups in your subscription, use:
+```Bash
+az group list --output table
+```
+
+This command will display all resource groups with their names and locations. Copy the name of the resource group where you want to assign the role.
+
+b) Assign the Contributor Role
+```Bash
+az role assignment create \
+  --assignee contributoruser@example.com \
+  --role "Contributor" \
+  --scope "/subscriptions/<subscription-id>/resourceGroups/<resource-group-name>"
+```
+
+**Replace:**  
+• <**subscription-id**>: With your Azure subscription ID.
+• <**resource-group-name**>: With the name of the target resource group (“Honeynet-RG” in this case).
+
+**Parameters:**  
+--assignee: The user to receive the role. Can be specified as:  
+• User Principal Name (e.g., contributoruser@example.com),  
+• Object ID, or  
+• Service Principal ID.  
+--role: The name of the role. Here, it is "Contributor".  
+--scope: The level of access being granted. For a resource group, use:  
+• /subscriptions/<subscription-id>/resourceGroups/<resource-group-name>.  
+
+#### 3.3. Verify Role Assignment
+
+To confirm the user has been assigned the role, run:
+```Bash
+az role assignment list \
+  --assignee contributoruser@example.com \
+  --scope "/subscriptions/<subscription-id>/resourceGroups/<resource-group-name>" \
+  --output table
+```
+
+
+
 
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
