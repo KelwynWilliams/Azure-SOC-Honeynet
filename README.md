@@ -825,6 +825,67 @@ az monitor diagnostic-settings list \
     --output table
 ```
 
+## Step 3: Microsoft Entra ID User Configuration
+
+In this step, we will configure several Users with varying roles/permissions: 
+
+- Tenant-Level Global Reader
+- Subscription Reader
+- Resource Group Contributor
+
+### 1. Tenant-Level Global Reader
+
+The Global Reader role is a read-only version of the Global Administrator role. It provides the user with the ability to:
+- View all administrative information across the Azure tenant.
+- View resource configurations in Microsoft Entra ID, Azure subscriptions, and resources.
+- Access data and configurations without making any modifications.
+- View security policies, user attributes, group memberships, and directory settings
+
+Key Characteristics:
+- No Write Access: The user cannot make changes to resources or settings.
+- Tenant-Level Scope: When assigned at the root (/), the role applies globally across the tenant.
+
+#### 1.1. Create a User Account
+```Bash
+az ad user create \
+  --display-name "Global Reader User" \
+  --user-principal-name globalreader@example.com \
+  --password "YourStrongPassword123!"
+```
+**Parameters:**  
+--display-name: The name of the user displayed in Microsoft Entra ID.  
+--user-principal-name: The user’s unique login name (e.g., user@yourdomain.com).  
+--password: A strong password for the user. Must meet password complexity requirements.  
+
+#### 1.2. Assign the Global Reader Role
+
+To assign the Global Reader role to the user at the tenant level, use the following command:
+```Bash
+az role assignment create \
+  --assignee globalreader@example.com \
+  --role "Global Reader" \
+  --scope "/"
+```
+
+**Parameters:**  
+--assignee: The user being assigned the role. Can be specified as:  
+• User Principal Name (e.g., globalreader@example.com),  
+• Object ID,  
+• or Service Principal ID.  
+--role: The name of the role. In this case, it is "Global Reader". This role has pre-defined read-only permissions across the tenant.
+--scope: The level at which the role applies:  
+• / indicates the tenant root scope (global permissions).  
+
+#### 1.3. Verify Role Assignment
+
+To confirm the user has been assigned the role:
+```Bash
+az role assignment list \
+  --assignee globalreader@example.com \
+  --all
+```
+
+
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
 ![Linux Syslog Auth Failures](https://i.imgur.com/G1YgZt6.png)<br>
