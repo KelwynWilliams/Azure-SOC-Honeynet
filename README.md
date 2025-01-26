@@ -1015,13 +1015,25 @@ az role assignment list \
   --output table
 ```
 
+## Step 4: Alerts & Attack World Maps 
 
+In this step, we will import a list of Custom Sentinel Analytics Rules, written in .JSON. This file has been attached to this project.  
+
+An analytics rule in Microsoft Sentinel is a set of conditions and logic that automatically analyzes data ingested into the platform to detect potential security threats or incidents. It uses built-in or custom queries, such as KQL (Kusto Query Language), to scan logs and telemetry data for patterns indicative of suspicious or malicious activity. Analytics rules are used to trigger alerts, investigate incidents, and automate responses, helping security teams quickly identify and mitigate risks in their environment.
+
+### 1. Import Sentinel Analytics Rules
+
+- Login to the Azure Portal
+- Go to: Microsoft Sentinel > Analytics > Import
+- Select the "Sentinel-Analytics-Rules (KQL Alert Queries).JSON" file to import
+
+![Sentinel Analytics Rules](https://github.com/user-attachments/assets/3624b4d4-5fd3-4c24-be63-27c8d446dd53)
 
 
 ## Attack Maps Before Hardening / Security Controls
-![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
-![Linux Syslog Auth Failures](https://i.imgur.com/G1YgZt6.png)<br>
-![Windows RDP/SMB Auth Failures](https://i.imgur.com/ESr9Dlv.png)<br>
+![nsg-malicious-allowed in](https://github.com/user-attachments/assets/95ab83aa-3914-4e96-aa4f-6b5d1ae23080)<br>
+![syslog-ssh-auth-fail](https://github.com/user-attachments/assets/04d547b9-38b9-40d3-8414-d118d9a3ef0b)<br>
+![windows-rdp-smb-auth-fail](https://github.com/user-attachments/assets/2151d1be-3df2-445b-b4ca-745df823169a)<br>
 
 ## Metrics Before Hardening / Security Controls
 
