@@ -35,13 +35,13 @@ For the "AFTER" metrics, Network Security Groups were hardened by blocking ALL t
 
 Let's start by configuring the resources we will need for our Honeynet
 
-## Configuring our Honeynet Resources
-1. Create a Resource Group
+## Step 1: Configuring our Honeynet Resources
+### 1. Create a Resource Group
 ```Bash
 az group create --name Honeynet-RG --location eastus
 ```
 
-2. Create a Virtual Network and Subnet
+### 2. Create a Virtual Network and Subnet
 ```Bash
 az network vnet create \
   --resource-group Honeynet-RG \
@@ -51,24 +51,24 @@ az network vnet create \
   --subnet-prefix 10.0.0.0/24
 ```
 
-3. Create a Public IP Address
+### 3. Create a Public IP Address
 ```Bash
 az network public-ip create \
   --resource-group Honeynet-RG \
   --name Honeynet-PublicIP
 ```
 
-4. Create a Network Security Group (NSG) to Allow all Inbound Traffic via the Internet
+### 4. Create a Network Security Group (NSG) to Allow all Inbound Traffic via the Internet
 
 We are creating this NSG to allow all inbound traffic to our Virtual Machines, making our Honeynet environment enticing to attackers/hackers. not to worry will be replaced with a hardened NSG later on in our project.
 
-4.1. Create NSG Instance
+#### 4.1. Create NSG Instance
 ```Bash
 az network nsg create \
   --resource-group Honeynet-RG \
   --name Honeynet-NSG
 ```
-4.2. Create NSG Rule to Allow All Inbound Traffic
+#### 4.2. Create NSG Rule to Allow All Inbound Traffic
 ```Bash
 az network nsg rule create \
   --resource-group Honeynet-RG \
@@ -84,9 +84,9 @@ az network nsg rule create \
   --destination-port-range ‘*’
 ```
 
-5. Configure the Windows VM 
+### 5. Configure the Windows Virtual Machine
 
-5.1. Create Windows VM
+#### 5.1. Create Windows VM
 Here, we use a Windows 10 image for the VM.
 ```Bash
 az vm create \
@@ -99,7 +99,7 @@ az vm create \
   --admin-password <password>
 ```
 
-5.2. Identify the NIC Associated with the Windows VM
+#### 5.2. Identify the NIC Associated with the Windows VM
 
 We will need to know the VM's Network Interface Card (NIC) in order to associate the Open Honeynet NSG to the VM
 ```Bash
@@ -110,7 +110,7 @@ az vm show \
   --output tsv
 ```
 
-5.3. Apply the NSG to the NIC
+#### 5.3. Apply the NSG to the NIC
 
 Use the az network nic update command to associate the NSG with the Windows NIC
 ```Bash
@@ -121,8 +121,47 @@ az network nic update \
 ```
 **Parameters:**
   --name: Replace <**WindowsVMNIC**> with the name of the VM's NIC you discovered earlier
-
   
+### 6. Configure Linux Virtual Machine
+
+#### 6.1.	Create Linux VM
+
+Here, we use an Ubuntu Linux image for the VM
+```Bash
+az vm create \
+  --resource-group Honeynet-RG \
+  --name Linux-VM \
+  --vnet-name Honeynet-VNet \
+  --subnet Honeynet-Subnet \
+  --image UbuntuLTS \
+  --size Standard_E2bs_v5 \
+  --authentication-type password \
+  --admin-username <username> \
+  --admin-password <password> \
+```
+
+#### 6.2. Identify the NIC Associated with the Linux VM
+```Bash
+az vm show \
+  --resource-group Honeynet-RG \
+  --name Linux-VM \
+  --query “networkProfile.networkInterfaces[0].id” \
+  --output tsv
+```
+
+#### 6.3. Apply the NSG to the NIC
+
+Use the az network nic update command to associate the NSG with the Linux NIC
+```Bash
+az network nic update \
+  --resource-group Honeynet-RG \
+  --name <LinuxVMNIC> \
+  --network-security-group Honeynet-NSG
+ ``` 
+**Parameters:**
+  --name: Replace <**LinuxVMNIC**> with the name of the VM's NIC you discovered earlier
+  
+
 
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
