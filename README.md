@@ -1030,12 +1030,22 @@ An analytics rule in Microsoft Sentinel is a set of conditions and logic that au
 ![Sentinel Analytics Rules](https://github.com/user-attachments/assets/3624b4d4-5fd3-4c24-be63-27c8d446dd53)
 
 
-## Attack Maps Before Hardening / Security Controls
+### 2. Attack World Maps
+
+The attack maps will be generated using the .JSON files attached to this project.
+
+### Attack Maps Before Hardening / Security Controls
+
+### nsg-malicious-allowed-in
 ![nsg-malicious-allowed in](https://github.com/user-attachments/assets/95ab83aa-3914-4e96-aa4f-6b5d1ae23080)<br>
+
+### Syslog-ssh-auth-fail
 ![syslog-ssh-auth-fail](https://github.com/user-attachments/assets/04d547b9-38b9-40d3-8414-d118d9a3ef0b)<br>
+
+### Windows-rdp-smb-auth-fail
 ![windows-rdp-smb-auth-fail](https://github.com/user-attachments/assets/2151d1be-3df2-445b-b4ca-745df823169a)<br>
 
-## Metrics Before Hardening / Security Controls
+### Metrics Before Hardening / Security Controls
 
 The following table shows the metrics we measured in our insecure environment for 24 hours:
 Start Time 2023-03-15 17:04:29
@@ -1052,6 +1062,9 @@ Stop Time 2023-03-16 17:04:29
 ## Attack Maps Before Hardening / Security Controls
 
 ```All map queries actually returned no results due to no instances of malicious activity for the 24 hour period after hardening.```
+
+## Step 5: Secure / Harden Cloud Configuration
+
 
 ## Metrics After Hardening / Security Controls
 
