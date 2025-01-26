@@ -162,6 +162,88 @@ az network nic update \
   --name: Replace <**LinuxVMNIC**> with the name of the VM's NIC you discovered earlier
   
 
+## 7. Configure the SQL Server within the Windows VM
+
+### 7.1. Connect to the VM
+Identify the Windows VM's Public IP address using the following command:
+```Bash
+az vm list-ip-addresses
+  --name Windows-VM \
+  --resource-group Honeynet-RG \
+  --query "[].virtualMachine.network.publicIp.Addresses[].ipAddress" \
+  --output tsv
+```
+
+Use Remote Desktop Protocol (RDP) to connect to the VM:
+```batch
+mstsc /v:<Windows VM-Public-IP-Address>
+```
+![RDP](https://github.com/user-attachments/assets/d4d58475-0fb3-436e-a716-65a7df290fda)
+
+Log in with the admin username and password you set earlier.
+
+
+### 7.2. Turn Off Windows Defender Firewall
+
+In order for our 
+
+Once inside the VM:
+
+•	Turn off the Windows firewall (this will allow the VM to respond to ping requests and make it more discoverable on the internet to bad actors/attackers)
+-	Type in “wf.msc” in the start menu
+-	Go to “Windows Defender Firewall Properties” and turn off the Firewall states on the Domain, Private and Public Profile tabs
+
+![Turn off Windows Firewall (1)](https://github.com/user-attachments/assets/80491864-d45d-4330-bc44-a2d63be61ea6)
+
+![Turn off Windows Firewall (2)](https://github.com/user-attachments/assets/3a8e81df-4c3d-4576-8295-e5343c9e017d)
+
+
+•	Install SQL Server Evaluation  <https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server-2019>
+-	This can be downloaded online as an .exe file 
+-	Follow the installation steps provided
+-	Feature Selection:	Database Engine Services
+-	Instance ID:	MSSQLSERVER (Default)
+-	Server Config:	(Default)
+-	Authen Mode:	Mixed Mode
+-	Username:		sa (Default System Admin)
+-	Password:		<Password>
+-	Specify SQL Admin:Add Current User
+
+•	Install SSMS (SQL Server Management Studio): <https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms>
+
+•	Enable logging for SQL Server to be ported into Windows Event Viewer
+-	Link to step-by-step process available here: https://learn.microsoft.com/en-us/sql/relational-databases/security/auditing/write-sql-server-audit-events-to-the-security-log?view=sql-server-ver16 
+
+-	Provide full permission for the SQL Server service account to the registry hive:
+
+ **HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog\Security**
+
+ ![Set up SQL server within windows VM](https://github.com/user-attachments/assets/3799d599-740d-46f5-9c66-159e5bb41b93)
+
+-	Right click “Security”, Select “Permissions”
+-	Click “Add”
+-	Enter “NETWORK SERVICES” and click OK
+-	Allow “Full Control” and Click Apply
+
+### 7.3. Open a command prompt with administrative permissions.
+
+a.	From the Start menu, navigate to Command Prompt, and then select Run as administrator.
+b.	If the User Account Control dialog box opens, select Continue.
+
+3.	Execute the following statement to enable auditing from SQL Server.
+```Powershell
+auditpol /set /subcategory:"application generated" /success:enable /failure:enable
+```
+
+6.	Close the command prompt window.
+
+• Open SQL Server Management Studio (SSMS).
+-	Login using the System Admin (sa) credentials you set up earlier
+-	Once connected, right-click on the SQL Server (in the Object Explorer Box on the left-hand side)
+-	Click “Properties” > “Security” 
+-	On “Login Auditing”, check “both failed and successful logins” and click OK
+-	Right click the SQL Server and click “Restart”
+
 
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
