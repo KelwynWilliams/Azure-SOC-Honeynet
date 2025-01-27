@@ -1071,7 +1071,7 @@ The NIST SP 800-53 Regulatory Compliance Recommendations from Microsoft Defender
 
 In this step, we will enable MDC Regulatory Compliance Recommendations based on NIST SP 800-53. We will also implement a few the framework's suggested remediations.
 
-### 5.1. Enable Microsoft Defender for Cloud Regulatory Compliance Recommendations based on NIST 800-53
+### 1. Enable Microsoft Defender for Cloud Regulatory Compliance Recommendations based on NIST 800-53
 
 Using the Azure Portal, Serch for "Microsoft Defender for Cloud"  
 
@@ -1088,7 +1088,65 @@ Regulatory Compliance > Manage Compliance Polices > Select Subscription > Securi
 ![NIST 800-53 (7)](https://github.com/user-attachments/assets/835141f5-9fc1-432c-a690-8467e0014b19)<br>
 
 
+### 2. Hardening VM NSGs in accordance with NIST SP 800-53
 
+#### 2.1 Dissassociate Open NSG from Windows and Linux VMs
+
+**WINDOWS VM**
+
+```Bash
+az network nic update \
+  --resource-group Honeynet-RG \
+  --name <Windows-VMNIC> \
+  --remove networkSecurityGroup
+```
+
+**LINUX VM**
+
+```Bash
+az network nic update \
+  --resource-group Honeynet-RG \
+  --name <Linux-VMNIC> \
+  --remove networkSecurityGroup
+```
+
+
+
+#### 2.2. Create a rule to deny all inbound traffic (default deny policy):
+
+**WINDOWS**
+
+```Bash
+az network nsg rule create \
+  --resource-group Honeynet-RG \
+  --nsg-name Windows-NSG \
+  --name DenyAllInbound \
+  --priority 4096 \
+  --direction Inbound \
+  --access Deny \
+  --protocol '*' \
+  --source-address-prefix '*' \
+  --source-port-range '*' \
+  --destination-address-prefix '*' \
+  --destination-port-range '*'
+```
+
+**LINUX**
+
+```Bash
+az network nsg rule create \
+  --resource-group Honeynet-RG \
+  --nsg-name Linux-NSG \
+  --name DenyAllInbound \
+  --priority 4096 \
+  --direction Inbound \
+  --access Deny \
+  --protocol '*' \
+  --source-address-prefix '*' \
+  --source-port-range '*' \
+  --destination-address-prefix '*' \
+  --destination-port-range '*'
+```
 
 
 
