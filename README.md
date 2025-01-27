@@ -449,7 +449,7 @@ az monitor data-collection rule list --output table
 
 ### 5. Enable Log Collection from Virtual Machines (VMs) and Network Security Groups (NSGs)
 
-These are the Logs we will collect the following sources:
+These are the Logs we will collect from the following sources:
 
 - Window Event Logs (windows-vm)
 - syslog (linux-vm)
