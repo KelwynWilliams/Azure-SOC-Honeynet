@@ -778,14 +778,14 @@ Resource-Level Logs in Azure provide detailed insights into the operations and p
 Use the following command to create a diagnostic setting for the Storage Account and enable Audit Logs:
 ```Bash
 az monitor diagnostic-settings create \
-    --name <diagnostic-setting-name> \
+    --name StorageAudit-DS \
     --resource "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.Storage/storageAccounts/Honeynet-Storage" \
     --workspace <log-analytics-workspace-id> \
     --logs '[{"category": "AuditLogs", "enabled": true}]'
 ```
 
 **Parameters:**  
---name <diagnostic-setting-name>: The name for the diagnostic setting (e.g., StorageAuditLogs).  
+--name: The name for the diagnostic setting (e.g., StorageAudit-DS).  
 --resource: The full resource ID of the Storage Account.  
 --workspace: The ID of the Log Analytics Workspace where the logs will be sent.  
 --logs '[{"category": "AuditLogs", "enabled": true}]': Specifies that AuditLogs should be enabled for the Storage Account.  
@@ -805,14 +805,14 @@ az monitor diagnostic-settings list \
 Use the following Azure CLI command to enable logging for Audit Logs in your Key Vault:
 ```Bash
 az monitor diagnostic-settings create \
-    --name <diagnostic-setting-name> \
+    --name KeyVaultAudit-DS \
     --resource "/subscriptions/<subscription-id>/resourceGroups/Honeynet-RG/providers/Microsoft.KeyVault/vaults/Honeynet-KeyVault" \
     --workspace <log-analytics-workspace-id> \
     --logs '[{"category": "AuditEvent", "enabled": true}]'
 ```
 
 **Parameters:**  
---name <diagnostic-setting-name>: Name of the diagnostic setting (e.g., KeyVaultAuditLogs).  
+--name: Name of the diagnostic setting (e.g., KeyVaultAudit-DS).  
 --resource: The full resource ID of the Key Vault.  
 --workspace <log-analytics-workspace-id>: The ID of the Log Analytics Workspace where the logs will be sent.  
 --logs '[{"category": "AuditEvent", "enabled": true}]': Specifies the log category (AuditEvent) to enable.  
@@ -1063,9 +1063,6 @@ Stop Time 2025-01-16 17:04:29
 | SecurityIncident         | 312
 | AzureNetworkAnalytics_CL | 932
 
-## Attack Maps Before Hardening / Security Controls
-
-```All map queries actually returned no results due to no instances of malicious activity for the 24 hour period after hardening.```
 
 ## Step 5: Secure / Harden Cloud Configuration
 
@@ -1118,7 +1115,7 @@ az network nic update \
 
 #### 2.2. Create a rule to deny all inbound traffic (default deny policy):
 
-**WINDOWS**
+**WINDOWS NSG**
 
 ```Bash
 az network nsg rule create \
@@ -1135,7 +1132,7 @@ az network nsg rule create \
   --destination-port-range '*'
 ```
 
-**LINUX**
+**LINUX NSG**
 
 ```Bash
 az network nsg rule create \
@@ -1196,7 +1193,7 @@ Restrict outbound access to the internet and allow only necessary destinations.
 
 a. Deny All Outbound Traffic
 
-**WINDOWS**  
+**WINDOWS NSG**  
 ```Bash
 az network nsg rule create \
   --resource-group Honeynet-RG \
@@ -1212,7 +1209,7 @@ az network nsg rule create \
   --destination-port-range '*'
 ```
 
-**LINUX**  
+**LINUX NSG**  
 ```Bash
 az network nsg rule create \
   --resource-group Honeynet-RG \
@@ -1230,7 +1227,7 @@ az network nsg rule create \
 
 b) Allow Access to Specific External IPs or Services
 
-**WINDOWS**
+**WINDOWS NSG**
 ```Bash
 az network nsg rule create \
   --resource-group Honeynet-RG \
@@ -1246,7 +1243,7 @@ az network nsg rule create \
   --destination-port-range '*'
 ```
 
-**LINUX**
+**LINUX NSG**
 ```Bash
 az network nsg rule create \
   --resource-group Honeynet-RG \
