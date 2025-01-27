@@ -1051,9 +1051,9 @@ The attack maps will be generated using the .JSON files attached to this project
 
 ### Metrics Before Hardening / Security Controls
 
-The following table shows the metrics we measured in our insecure environment for 24 hours:
-Start Time 2025-01-15 17:04:29
-Stop Time 2025-01-16 17:04:29
+The following table shows the metrics we measured in our insecure environment for 24 hours:  
+Start Time 2025-01-15 17:04:29  
+Stop Time 2025-01-16 17:04:29  
 
 | Metric                   | Count
 | ------------------------ | -----
@@ -1359,17 +1359,17 @@ az keyvault network-rule add \
 
 ## Metrics After Hardening / Security Controls
 
-The following table shows the metrics we measured in our environment for another 24 hours, but after we have applied security controls:
-Start Time 2025-01-18 15:37
-Stop Time	2025-01-19 15:37
+The following table shows the metrics we measured in our environment for another 24 hours, but after we have applied security controls:  
+Start Time 2025-01-18 15:37  
+Stop Time	2025-01-19 15:37  
 
-| Metric                   | Count
-| ------------------------ | -----
-| SecurityEvent            | 5072
-| Syslog                   | 16
-| SecurityAlert            | 0
-| SecurityIncident         | 0
-| AzureNetworkAnalytics_CL | 0
+| Metric                   | Count   | Change in Hardened Environment |
+| ------------------------ | ------- | ------------------------------ |
+| SecurityEvent            | 5072    | -75.13%                        |
+| Syslog                   | 16      | -99.61%                        |
+| SecurityAlert            | 0       | -100.00%                       |
+| SecurityIncident         | 0       | -100.00%                       |
+| AzureNetworkAnalytics_CL | 0       | -100.00%                       |
 
 ## Conclusion
 
