@@ -1288,20 +1288,20 @@ In particular, Enabling Private Endpoint and Firewall for our Storage Account an
 a) Create a Private Endpoint  
 ```Bash
 az network private-endpoint create \
-  --name Storage-PE> \
+  --name Storage-PE \
   --resource-group Honeynet-RG \
   --vnet-name Honeynet-VNet \
   --subnet Honeynet-Subnet \
   --private-connection-resource-id $(az storage account show --name Honeynet-Storage --query "id" -o tsv) \
   --group-ids blob \
-  --connection-name <PRIVATE_CONNECTION_NAME>
+  --connection-name Storage-PC
 ```
 
 b) Approve the Private Endpoint Connection  
 ```Bash
 az storage account private-endpoint-connection approve \
   --account-name Honeynet-Storage \
-  --name <PRIVATE_CONNECTION_NAME>
+  --name Storage-PC
 ```
 
 #### 3.2. Enable Firewall for Storage Account
@@ -1327,14 +1327,14 @@ az network private-endpoint create \
   --subnet Honeynet-Subnet \
   --private-connection-resource-id $(az keyvault show --name Honeynet-KeyVault --query "id" -o tsv) \
   --group-ids vault \
-  --connection-name <PRIVATE_CONNECTION_NAME>
+  --connection-name KeyVault-PC
 ```
 
 b) Approve the Private Endpoint Connection  
 ```Bash
 az keyvault private-endpoint-connection approve \
-  --vault-name <KEYVAULT_NAME> \
-  --name <PRIVATE_CONNECTION_NAME>
+  --vault-name Honeynet-KeyVault \
+  --name KeyVault-PC
 ```
 
 #### 3.4. Enable Firewall for Key Vault
