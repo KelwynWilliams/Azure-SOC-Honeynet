@@ -1148,7 +1148,43 @@ az network nsg rule create \
   --destination-port-range '*'
 ```
 
+#### 2.3. Allow Specific Inbound Traffic
 
+a) Allow Remote Desktop (RDP) for Windows VM (TCP Port 3389)
+
+Restrict access to a specific trusted IP range:
+```Bash
+az network nsg rule create \
+  --resource-group Honeynet-RG\
+  --nsg-name Windows-NSG \
+  --name AllowRDP \
+  --priority 100 \
+  --direction Inbound \
+  --access Allow \
+  --protocol Tcp \
+  --source-address-prefix <TRUSTED_IP_RANGE> \
+  --source-port-range '*' \
+  --destination-address-prefix '*' \
+  --destination-port-range 3389
+```
+
+b) Allow Secure Shell (SSH) for Linux VM (TCP Port 22)
+
+Restrict access to a specific trusted IP range:
+```Bash
+az network nsg rule create \
+  --resource-group Honeynet-RG \
+  --nsg-name Linux-NSG \
+  --name AllowSSH \
+  --priority 110 \
+  --direction Inbound \
+  --access Allow \
+  --protocol Tcp \
+  --source-address-prefix <TRUSTED_IP_RANGE> \
+  --source-port-range '*' \
+  --destination-address-prefix '*' \
+  --destination-port-range 22
+```
 
 
 
