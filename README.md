@@ -1,5 +1,5 @@
 # Building a SOC + Honeynet in Azure (Live Traffic)
-![Cloud Honeynet / SOC](https://i.imgur.com/ZWxe03e.jpg)
+![Azure-SOC-Diagram](https://github.com/user-attachments/assets/430774bd-ec2f-4825-9c81-1a277a185e1b)
 
 ## Introduction
 
@@ -14,10 +14,10 @@ In this project, I build a mini honeynet in Azure and ingest log sources from va
 
 
 ## Architecture Before Hardening / Security Controls
-![Architecture Diagram](https://i.imgur.com/aBDwnKb.jpg)
+![Azure-SOC-Diagram (Public Internet)](https://github.com/user-attachments/assets/da0cfecc-eebf-4e48-826a-cf0367c03604)
 
 ## Architecture After Hardening / Security Controls
-![Architecture Diagram](https://i.imgur.com/YQNa9Pp.jpg)
+![Azure-SOC-Diagram (Secure)](https://github.com/user-attachments/assets/dc057992-cc20-41d0-a912-0132d86e6dc7)
 
 The architecture of the mini honeynet in Azure consists of the following components:
 
@@ -295,6 +295,8 @@ az keyvault create \
 Next, we will need to ensure that all the Logs and metrics from are ingested and flow through to our Logs Analytics Workspace. This will later be used by Windows Sentinel to build attack maps, trigger alerts, and create incidents.
 
 ## Step 2: Logging and Monitoring
+![Azure-SOC-Diagram (Log Ingestion)](https://github.com/user-attachments/assets/ee1abf94-2e9b-4fdb-b990-9179cdb36441)
+
 
 ### 1. Create a Log Analytics Workspace
 
@@ -1016,6 +1018,8 @@ az role assignment list \
 ```
 
 ## Step 4: Alerts & Attack World Maps 
+
+![Azure-SOC-Diagram (SIEM)](https://github.com/user-attachments/assets/d76c9701-eea5-4494-9919-5041a94f1328)
 
 In this step, we will import a list of Custom Sentinel Analytics Rules, written in .JSON. This file has been attached to this project.  
 
