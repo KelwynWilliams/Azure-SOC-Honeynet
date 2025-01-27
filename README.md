@@ -1048,16 +1048,16 @@ The attack maps will be generated using the .JSON files attached to this project
 ### Metrics Before Hardening / Security Controls
 
 The following table shows the metrics we measured in our insecure environment for 24 hours:
-Start Time 2023-03-15 17:04:29
-Stop Time 2023-03-16 17:04:29
+Start Time 2025-01-15 17:04:29
+Stop Time 2025-01-16 17:04:29
 
 | Metric                   | Count
 | ------------------------ | -----
-| SecurityEvent            | 19470
-| Syslog                   | 3028
+| SecurityEvent            | 20392
+| Syslog                   | 4149
 | SecurityAlert            | 10
-| SecurityIncident         | 348
-| AzureNetworkAnalytics_CL | 843
+| SecurityIncident         | 312
+| AzureNetworkAnalytics_CL | 932
 
 ## Attack Maps Before Hardening / Security Controls
 
@@ -1192,7 +1192,7 @@ Restrict outbound access to the internet and allow only necessary destinations.
 
 a. Deny All Outbound Traffic
 
-**WINDOWS**
+**WINDOWS**  
 ```Bash
 az network nsg rule create \
   --resource-group Honeynet-RG \
@@ -1208,7 +1208,7 @@ az network nsg rule create \
   --destination-port-range '*'
 ```
 
-**LINUX**
+**LINUX**  
 ```Bash
 az network nsg rule create \
   --resource-group Honeynet-RG \
@@ -1274,19 +1274,98 @@ Key Points for NIST 800-53 Compliance
 3. Monitoring: Enable flow logs and retain them for auditing.
 4. Least Privilege: Restrict the number of allowed ports and IP ranges.
 
+### 3. Implement NIST SP 800-53: SC-7 Remediations
 
+![NIST 800-53 (SC-7)](https://github.com/user-attachments/assets/4f17d193-d0f4-4145-a11c-2cb9bbee55ae)<br>
 
+We will now remediate a few suggestions made by NIST SP 800-53: SC-7  
+
+In particular, Enabling Private Endpoint and Firewall for our Storage Account and Key Vault  
+
+#### 3.1. Configure Private Endpoint for Storage Account
+
+a) Create a Private Endpoint  
+```Bash
+az network private-endpoint create \
+  --name Storage-PE> \
+  --resource-group Honeynet-RG \
+  --vnet-name Honeynet-VNet \
+  --subnet Honeynet-Subnet \
+  --private-connection-resource-id $(az storage account show --name Honeynet-Storage --query "id" -o tsv) \
+  --group-ids blob \
+  --connection-name <PRIVATE_CONNECTION_NAME>
+```
+
+b) Approve the Private Endpoint Connection  
+```Bash
+az storage account private-endpoint-connection approve \
+  --account-name Honeynet-Storage \
+  --name <PRIVATE_CONNECTION_NAME>
+```
+
+#### 3.2. Enable Firewall for Storage Account
+
+a) Restrict Access  
+
+Set the firewall to allow access only from private endpoints or specific IP ranges:  
+```Bash
+az storage account update \
+  --name Honeynet-Storage \
+  --resource-group Honeynet-RG \
+  --default-action Deny
+```
+
+#### 3.3. Configure Private Endpoint for Key Vault
+
+a) Create a Private Endpoint  
+```Bash
+az network private-endpoint create \
+  --name KeyVault-PE \
+  --resource-group Honeynet-RG \
+  --vnet-name Honeynet-VNet \
+  --subnet Honeynet-Subnet \
+  --private-connection-resource-id $(az keyvault show --name Honeynet-KeyVault --query "id" -o tsv) \
+  --group-ids vault \
+  --connection-name <PRIVATE_CONNECTION_NAME>
+```
+
+b) Approve the Private Endpoint Connection  
+```Bash
+az keyvault private-endpoint-connection approve \
+  --vault-name <KEYVAULT_NAME> \
+  --name <PRIVATE_CONNECTION_NAME>
+```
+
+#### 3.4. Enable Firewall for Key Vault
+
+a) Restrict Access  
+
+Set the firewall to deny access by default:
+```Bash
+az keyvault update \
+  --name Honeynet-KeyVault \
+  --resource-group Honeynet-RG \
+  --default-action Deny
+```
+
+b) Allow Specific IP Ranges  
+```Bash
+az keyvault network-rule add \
+  --name Honeynet-KeyVault \
+  --resource-group Honeynet-RG \
+  --ip-address <IP_ADDRESS_OR_RANGE>
+```
 
 ## Metrics After Hardening / Security Controls
 
 The following table shows the metrics we measured in our environment for another 24 hours, but after we have applied security controls:
-Start Time 2023-03-18 15:37
-Stop Time	2023-03-19 15:37
+Start Time 2025-01-18 15:37
+Stop Time	2025-01-19 15:37
 
 | Metric                   | Count
 | ------------------------ | -----
-| SecurityEvent            | 8778
-| Syslog                   | 25
+| SecurityEvent            | 5072
+| Syslog                   | 16
 | SecurityAlert            | 0
 | SecurityIncident         | 0
 | AzureNetworkAnalytics_CL | 0
