@@ -1186,6 +1186,93 @@ az network nsg rule create \
   --destination-port-range 22
 ```
 
+#### 2.4. Allow Specific Outbound Traffic
+
+Restrict outbound access to the internet and allow only necessary destinations.
+
+a. Deny All Outbound Traffic
+
+**WINDOWS**
+```Bash
+az network nsg rule create \
+  --resource-group Honeynet-RG \
+  --nsg-name Windows-NSG \
+  --name DenyAllOutbound \
+  --priority 4096 \
+  --direction Outbound \
+  --access Deny \
+  --protocol '*' \
+  --source-address-prefix '*' \
+  --source-port-range '*' \
+  --destination-address-prefix '*' \
+  --destination-port-range '*'
+```
+
+**LINUX**
+```Bash
+az network nsg rule create \
+  --resource-group Honeynet-RG \
+  --nsg-name Linux-NSG \
+  --name DenyAllOutbound \
+  --priority 4096 \
+  --direction Outbound \
+  --access Deny \
+  --protocol '*' \
+  --source-address-prefix '*' \
+  --source-port-range '*' \
+  --destination-address-prefix '*' \
+  --destination-port-range '*'
+```
+
+b) Allow Access to Specific External IPs or Services
+
+**WINDOWS**
+```Bash
+az network nsg rule create \
+  --resource-group Honeynet-RG \
+  --nsg-name Windows-NSG \
+  --name AllowUpdates \
+  --priority 120 \
+  --direction Outbound \
+  --access Allow \
+  --protocol '*' \
+  --source-address-prefix '*' \
+  --source-port-range '*' \
+  --destination-address-prefix <TRUSTED_EXTERNAL_IP> \
+  --destination-port-range '*'
+```
+
+**LINUX**
+```Bash
+az network nsg rule create \
+  --resource-group Honeynet-RG \
+  --nsg-name Linux-NSG \
+  --name AllowUpdates \
+  --priority 120 \
+  --direction Outbound \
+  --access Allow \
+  --protocol '*' \
+  --source-address-prefix '*' \
+  --source-port-range '*' \
+  --destination-address-prefix <TRUSTED_EXTERNAL_IP> \
+  --destination-port-range '*'
+```
+
+#### 2.5. Verification
+
+List the NSG rules to ensure they are applied:
+
+az network nsg rule list \
+  --resource-group Honeynet-RG \
+  --nsg-name <NSG_NAME> \
+  --output table
+
+Key Points for NIST 800-53 Compliance
+
+1. Access Control: Only allow trusted IP ranges for administrative access.
+2. Boundary Protection: Deny all inbound and outbound traffic except explicitly allowed.
+3. Monitoring: Enable flow logs and retain them for auditing.
+4. Least Privilege: Restrict the number of allowed ports and IP ranges.
 
 
 
